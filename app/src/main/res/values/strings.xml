@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">KitchenRecipeApp</string>
+    <string name="enter_your_email_address">Enter your email address</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="continue_without_registration">Continue without registration</string>
+    <string name="taskemail">jcuadros398@unab.edu.co</string>
+    <string name="taskpassword">123456</string>
 </resources>
