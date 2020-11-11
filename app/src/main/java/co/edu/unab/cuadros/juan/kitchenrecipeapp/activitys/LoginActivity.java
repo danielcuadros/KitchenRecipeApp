@@ -1,4 +1,4 @@
-package co.edu.unab.cuadros.juan.kitchenrecipeapp;
+package co.edu.unab.cuadros.juan.kitchenrecipeapp.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import co.edu.unab.cuadros.juan.kitchenrecipeapp.R;
 
 public class LoginActivity extends AppCompatActivity {
 

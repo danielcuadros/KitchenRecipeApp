@@ -1,6 +1,5 @@
-package co.edu.unab.cuadros.juan.kitchenrecipeapp;
+package co.edu.unab.cuadros.juan.kitchenrecipeapp.adapter;
 
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,9 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import co.edu.unab.cuadros.juan.kitchenrecipeapp.R;
+import co.edu.unab.cuadros.juan.kitchenrecipeapp.models.Recipe;
+
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> implements View.OnClickListener {
     public List<Recipe>myRecipes;
     private View.OnClickListener listener;
@@ -24,8 +26,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
         public MyViewHolder(View view){
             super(view);
-            name = (TextView)view.findViewById(R.id.text_recipe_name);
-            img = (ImageView)view.findViewById(R.id.img_recipe);
+            name = (TextView)view.findViewById(R.id.textView_namerecipe);
+            img = (ImageView)view.findViewById(R.id.imageView_recipe);
         }
     }
     public RecipeAdapter(List<Recipe> myRecipes){this.myRecipes = myRecipes;}

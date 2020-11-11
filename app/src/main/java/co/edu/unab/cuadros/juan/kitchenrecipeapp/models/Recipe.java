@@ -1,4 +1,4 @@
-package co.edu.unab.cuadros.juan.kitchenrecipeapp;
+package co.edu.unab.cuadros.juan.kitchenrecipeapp.models;
 
 public class Recipe {
     String id;
