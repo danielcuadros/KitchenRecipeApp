@@ -6,12 +6,11 @@ import android.os.Bundle;
 
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.R;
 
-
-public class DetailNoLoginActivity extends AppCompatActivity {
+public class AddRecipeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_no_login);
+        setContentView(R.layout.activity_add_recipe);
     }
 }

@@ -11,6 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.R;
+import co.edu.unab.cuadros.juan.kitchenrecipeapp.models.User;
+import co.edu.unab.cuadros.juan.kitchenrecipeapp.repositorio.UserRepository;
+import co.edu.unab.cuadros.juan.kitchenrecipeapp.service.CallBackRecipeApp;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -19,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     Button buttonLogin;
     Button buttonRegister;
     TextView textViewLogin;
+    UserRepository userRepository;
 
 
     @Override
@@ -31,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin = findViewById(R.id.button_login);
         buttonRegister = findViewById(R.id.button_register);
         textViewLogin = findViewById(R.id.textView_login);
+        userRepository = new UserRepository(LoginActivity.this);
 
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -38,12 +43,25 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = editTextEmail.getText().toString();
                 String password = editTextPassword.getText().toString();
-                if(email.equals(getString(R.string.taskemail)) && password.equals(getString(R.string.taskpassword))){
-                    Intent i = new Intent(LoginActivity.this,MainActivity.class);
-                    startActivity(i);
-                }else{
-                    Toast.makeText(LoginActivity.this, "wrong dates", Toast.LENGTH_SHORT).show();
-                }
+
+                userRepository.validate(email, password, new CallBackRecipeApp<User>() {
+                    @Override
+                    public void correct(User respuest) {
+                        if(respuest!=null){
+                            Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                            startActivity(i);
+                            finish();
+                        }else{
+                            Toast.makeText(LoginActivity.this,"Incorrect Data",Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void error(Exception e) {
+                        Toast.makeText(LoginActivity.this,"Incorrect Data",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -51,6 +69,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(i);
+            }
+        });
+
+        buttonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
             }
         });
