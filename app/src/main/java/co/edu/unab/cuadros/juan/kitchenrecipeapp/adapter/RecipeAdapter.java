@@ -16,62 +16,83 @@ import java.util.List;
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.R;
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.models.Recipe;
 
-public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> implements View.OnClickListener {
-    public List<Recipe>myRecipes;
-    private View.OnClickListener listener;
+public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
-        public TextView name;
-        public ImageView img;
+    List<Recipe> myRecipes;
+    OnItemClickListener onItemClickListener;
 
-        public MyViewHolder(View view){
-            super(view);
-            name = (TextView)view.findViewById(R.id.textView_namerecipe);
-            img = (ImageView)view.findViewById(R.id.imageView_recipe);
-        }
+    public RecipeAdapter(List<Recipe> myRecipes) {
+        this.myRecipes = myRecipes;
+        this.onItemClickListener = null;
     }
-    public RecipeAdapter(List<Recipe> myRecipes){this.myRecipes = myRecipes;}
-    public void setRecipes(List<Recipe> myRecipes){
-        this.myRecipes=myRecipes;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setRecipes(List<Recipe> myRecipes) {
+        this.myRecipes = myRecipes;
         notifyDataSetChanged();
     }
 
 
+    public class RecipeViewHolder extends RecyclerView.ViewHolder{
+
+        TextView textViewName;
+        ImageView imageViewPhoto;
+
+        public RecipeViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            textViewName = itemView.findViewById(R.id.textView_namerecipe);
+            imageViewPhoto = itemView.findViewById(R.id.imageView_recipe);
+
+        }
+
+        public void onBind(final Recipe myRecipe){
+
+            textViewName.setText(myRecipe.getName());
+
+            if(!myRecipe.getUrlImage().isEmpty()){
+                Glide.with(itemView.getContext()).load(myRecipe.getUrlImage()).into(imageViewPhoto);
+            }else{
+                Glide.with(itemView.getContext()).load(R.drawable.ic_launcher_background).into(imageViewPhoto);
+            }
+
+            if(onItemClickListener != null) {
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onItemClickListener.onItemClick(myRecipe,getAdapterPosition());
+                    }
+                });
+            }
+        }
+    }
+
     @NonNull
     @Override
-    public RecipeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recipes_list,parent,false);
-        itemView.setOnClickListener(this);
-        return new MyViewHolder(itemView);
+    public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View myView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipes_list,parent,false);
+        return new RecipeViewHolder(myView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecipeAdapter.MyViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = myRecipes.get(position);
-        holder.name.setText(recipe.getName());
-        if(!recipe.getUrlImage().isEmpty()){
-            Glide.with(holder.itemView.getContext()).load(recipe.getUrlImage()).into(holder.img);
-        }else{
-            Glide.with(holder.itemView.getContext()).load(R.drawable.ic_launcher_background).into(holder.img);
-
-        }
+        holder.onBind(recipe);
     }
 
     @Override
     public int getItemCount() {
         return myRecipes.size();
     }
-    public void setOnClickListener(View.OnClickListener listener){
-        this.listener=listener;
-    }
 
-    @Override
-    public void onClick(View view) {
+    public interface OnItemClickListener{
 
-        if (listener!=null){
-            listener.onClick(view);
-        }
+        void onItemClick(Recipe myRecipe, int position);
+
     }
 }
+

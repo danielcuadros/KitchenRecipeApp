@@ -1,11 +1,16 @@
 package co.edu.unab.cuadros.juan.kitchenrecipeapp.activitys;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -14,35 +19,72 @@ import java.util.List;
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.R;
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.adapter.RecipeAdapter;
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.models.Recipe;
+import co.edu.unab.cuadros.juan.kitchenrecipeapp.repositorio.RecipeRepository;
+import co.edu.unab.cuadros.juan.kitchenrecipeapp.service.CallBackRecipeApp;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView rvRecipe;
-    List<Recipe>myRecipes;
+    Button buttonAgregar;
+    List<Recipe> myRecipes;
     RecipeAdapter mAdapter;
+    RecipeRepository recipeRepository;
+
+    private static final int CODE_ADD = 100;
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CODE_ADD){
+            actualizarListado();
+            if(resultCode == RESULT_OK){
+                Toast.makeText(MainActivity.this, "All Good", Toast.LENGTH_SHORT).show();
+                actualizarListado();
+            }else{
+                Toast.makeText(MainActivity.this, "All Bad", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //m
+        
+        recipeRepository = new RecipeRepository(MainActivity.this);
+        
         rvRecipe = (RecyclerView)findViewById(R.id.rv_recipe);
+        buttonAgregar = findViewById(R.id.button_agregar);
         myRecipes = new ArrayList<>();
-
-        fakedata();
-
-        RecyclerView.LayoutManager managerG = new GridLayoutManager(MainActivity.this,2);
-        rvRecipe.setLayoutManager(managerG);
-        rvRecipe.setItemAnimator(new DefaultItemAnimator());
-        rvRecipe.setHasFixedSize(true);
 
         configurarAdapter();
 
+        RecyclerView.LayoutManager managerG = new GridLayoutManager(MainActivity.this,2);
+
+        buttonAgregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this,AddRecipeActivity.class);
+                startActivityForResult(i,CODE_ADD);
+            }
+        });
+
+        rvRecipe.setLayoutManager(managerG);
+        rvRecipe.setItemAnimator(new DefaultItemAnimator());
+        rvRecipe.setHasFixedSize(true);
 
     }
 
     public void configurarAdapter(){
         mAdapter = new RecipeAdapter(myRecipes);
-        mAdapter.setOnClickListener(view -> Toast.makeText(MainActivity.this, "Seleccion: "+myRecipes.get(rvRecipe.getChildAdapterPosition(view)).getName(), Toast.LENGTH_SHORT).show());
+        mAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Recipe myRecipe, int position) {
+
+            }
+        });
         rvRecipe.setAdapter(mAdapter);
     }
 
@@ -51,28 +93,64 @@ public class MainActivity extends AppCompatActivity {
         recipe1.setName("carne");
         recipe1.setUser("jcuadros398@unab.edu.co");
         recipe1.setUrlImage("https://www.archies.co/media/di-carne-min.jpg");
+        recipe1.setDescription("no hay");
 
-        myRecipes.add(recipe1);
+        recipeRepository.agregarFS(recipe1, new CallBackRecipeApp<Boolean>() {
+            @Override
+            public void correct(Boolean respuest) {
 
-        Recipe recipe2 = new Recipe();
-        recipe2.setName("pollo");
-        recipe2.setUser("jcuadros398@unab.edu.co");
-        recipe2.setUrlImage("https://www.archies.co/media/di-carne-min.jpg");
+                Recipe recipe2 = new Recipe();
+                recipe2.setName("pollo");
+                recipe2.setDescription("no hay");
+                recipe2.setUser("jcuadros398@unab.edu.co");
+                recipe2.setUrlImage("https://www.archies.co/media/di-carne-min.jpg");
 
-        myRecipes.add(recipe2);
+                recipeRepository.agregarFS(recipe2, new CallBackRecipeApp<Boolean>() {
+                    @Override
+                    public void correct(Boolean respuest) {
+                        
+                        actualizarListado();
+                    }
 
-        Recipe recipe3 = new Recipe();
-        recipe3.setName("pollo");
-        recipe3.setUser("jcuadros398@unab.edu.co");
-        recipe3.setUrlImage("https://www.archies.co/media/di-carne-min.jpg");
+                    @Override
+                    public void error(Exception e) {
 
-        myRecipes.add(recipe3);
+                    }
+                });
+            }
 
-        Recipe recipe4 = new Recipe();
-        recipe4.setName("pollo");
-        recipe4.setUser("jcuadros398@unab.edu.co");
-        recipe4.setUrlImage("https://www.archies.co/media/di-carne-min.jpg");
+            @Override
+            public void error(Exception e) {
 
-        myRecipes.add(recipe4);
+            }
+        });
     }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        actualizarListado();
+    }
+
+    private void actualizarListado(){
+        recipeRepository.obtenerTodosFS(new CallBackRecipeApp<List<Recipe>>() {
+            @Override
+            public void correct(List<Recipe> listado) {
+                myRecipes = listado;
+                if(myRecipes.isEmpty()){
+                    fakedata();
+                }
+                mAdapter.setRecipes(myRecipes);
+            }
+            @Override
+            public void error(Exception e) {
+                Log.d("Este",e.getMessage());
+                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    
+
 }

@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.models.Recipe;
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.service.CallBackRecipeApp;
@@ -29,39 +30,35 @@ public class RecipeRepository {
         firestore = FirebaseFirestore.getInstance();
     }
 
-    public void obtenerTodosFS(final CallBackRecipeApp<List<Recipe>> respuesta) {
-        final List<Recipe> lista = new ArrayList<>();
+    public void obtenerTodosFS(final CallBackRecipeApp<List<Recipe>> respuest){
+        final List<Recipe> list = new ArrayList<>();
         firestore.collection(COLECCION_RECIPE).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
 
-                if (task.isSuccessful()) {
-
-                    for (QueryDocumentSnapshot documento : task.getResult()) {
-                        final Recipe miRecipe = documento.toObject(Recipe.class);
-                        miRecipe.setId(documento.getId());//obligatorio ponerlo en cualquiera de las dos formas
-                        lista.add(miRecipe);
+                    for(QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())){
+                        final Recipe myProduct = document.toObject(Recipe.class);
+                        myProduct.setId(document.getId());
+                        list.add(myProduct);
                     }
-
-                    respuesta.correct(lista);
-
-                } else {
-
-                    respuesta.error(task.getException());
+                    respuest.correct(list);
+                }else{
+                    respuest.error(task.getException());
                 }
             }
         });
 
     }
 
-    public void agregarFS(Recipe miRecipe, final CallBackRecipeApp<Boolean> respuesta) {
-        firestore.collection(COLECCION_RECIPE).add(miRecipe).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+    public void agregarFS(Recipe myRecipe, final CallBackRecipeApp<Boolean> respuest){
+        firestore.collection(COLECCION_RECIPE).add(myRecipe).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
-                if (task.isSuccessful()) {
-                    respuesta.correct(true);
-                } else {
-                    respuesta.error(task.getException());
+                if(task.isSuccessful()){
+                    respuest.correct(true);
+                }else{
+                    respuest.error(task.getException());
                 }
             }
         });

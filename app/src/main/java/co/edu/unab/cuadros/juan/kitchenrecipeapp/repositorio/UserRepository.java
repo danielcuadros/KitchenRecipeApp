@@ -1,6 +1,7 @@
 package co.edu.unab.cuadros.juan.kitchenrecipeapp.repositorio;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -17,21 +18,21 @@ import co.edu.unab.cuadros.juan.kitchenrecipeapp.service.CallBackRecipeApp;
 
 public class UserRepository {
     private final FirebaseFirestore firestore;
-    private FirebaseAuth auth;
+    private FirebaseAuth mAuth;
     final String COLLECTION_USER = "users";
 
     public UserRepository(Context context){
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
     }
 
     public void validate(String correo, String pass, final CallBackRecipeApp<User> result){
-        auth.signInWithEmailAndPassword(correo,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(correo,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    FirebaseUser firebaseUser = auth.getCurrentUser();
-                    getById(firebaseUser.getUid(), new CallBackRecipeApp<User>() {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    getById(user.getUid(), new CallBackRecipeApp<User>() {
                         @Override
                         public void correct(User respuest) {
                             result.correct(respuest);
@@ -67,13 +68,13 @@ public class UserRepository {
     }
 
     public void create(final User myUser, String pass, final CallBackRecipeApp<Boolean> respuest){
-        auth.createUserWithEmailAndPassword(myUser.getEmail(),pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(myUser.getEmail().toString(),pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    FirebaseUser firebaseUser = auth.getCurrentUser();
-                    myUser.setId(firebaseUser.getUid());
-                    firestore.collection(COLLECTION_USER).document(firebaseUser.getUid()).set(myUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    myUser.setId(user.getUid());
+                    firestore.collection(COLLECTION_USER).document(user.getUid()).set(myUser).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
