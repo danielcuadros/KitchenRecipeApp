@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void correct(User respuest) {
                         if(respuest!=null){
                             Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                            i.putExtra("bandera", 1);
                             startActivity(i);
                             finish();
                         }else{
@@ -69,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                i.putExtra("bandera", 2);
                 startActivity(i);
             }
         });

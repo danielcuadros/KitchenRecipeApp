@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     List<Recipe> myRecipes;
     RecipeAdapter mAdapter;
     RecipeRepository recipeRepository;
-
     private static final int CODE_ADD = 100;
 
 
@@ -52,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final int entrada = getIntent().getIntExtra("bandera",0);
         
         recipeRepository = new RecipeRepository(MainActivity.this);
         
@@ -63,13 +64,18 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView.LayoutManager managerG = new GridLayoutManager(MainActivity.this,2);
 
-        buttonAgregar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this,AddRecipeActivity.class);
-                startActivityForResult(i,CODE_ADD);
-            }
-        });
+        if( entrada == 1){
+            buttonAgregar.setVisibility(View.VISIBLE);
+            buttonAgregar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(MainActivity.this,AddRecipeActivity.class);
+                    startActivityForResult(i,CODE_ADD);
+                }
+            });
+        }
+
+
 
         rvRecipe.setLayoutManager(managerG);
         rvRecipe.setItemAnimator(new DefaultItemAnimator());
@@ -82,7 +88,14 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Recipe myRecipe, int position) {
-
+                final int entrada = getIntent().getIntExtra("bandera",0);
+                if(entrada == 1){
+                    Intent i = new Intent(MainActivity.this, DetailActivity.class);
+                    startActivity(i);
+                }else if(entrada == 2){
+                    Intent i = new Intent(MainActivity.this, DetailNoLoginActivity.class);
+                    startActivity(i);
+                }
             }
         });
         rvRecipe.setAdapter(mAdapter);
