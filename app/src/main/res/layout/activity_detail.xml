@@ -62,7 +62,7 @@
             app:srcCompat="@drawable/ic_baseline_thumb_up_24" />
 
         <EditText
-            android:id="@+id/editTextMultiLine_comentar"
+            android:id="@+id/edit_comentar"
             android:layout_width="300dp"
             android:layout_height="56dp"
             android:layout_marginStart="56dp"
@@ -84,9 +84,10 @@
             android:text="Comentar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextMultiLine_comentar" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_comentar" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_comentarios"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="56dp"

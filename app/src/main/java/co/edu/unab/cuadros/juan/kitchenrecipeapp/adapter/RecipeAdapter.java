@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.R;
+import co.edu.unab.cuadros.juan.kitchenrecipeapp.models.Comentario;
 import co.edu.unab.cuadros.juan.kitchenrecipeapp.models.Recipe;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
@@ -49,7 +50,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         }
 
-        public void onBind(final Recipe myRecipe){
+        public void onBind( final Recipe myRecipe){
 
             textViewName.setText(myRecipe.getName());
 
