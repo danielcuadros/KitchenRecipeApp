@@ -21,6 +21,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     Button buttonCancel;
     RecipeRepository recipeRepository;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         buttonCancel = findViewById(R.id.button_cancela);
 
         final String idRecipe = getIntent().getStringExtra("idRecipe");
+        final String user = getIntent().getStringExtra("users");
 
 
         if(idRecipe != null){
@@ -57,11 +59,13 @@ public class AddRecipeActivity extends AppCompatActivity {
 
             buttonGuardar.setText("EDITAR");
 
+
+
             buttonGuardar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     setResult(RESULT_OK);
-                    Recipe myRecipe = new Recipe(editTextName.getText().toString(), editTextImage.getText().toString(), editTextDescripcion.getText().toString());
+                    Recipe myRecipe = new Recipe(editTextName.getText().toString(),user, editTextImage.getText().toString(), editTextDescripcion.getText().toString());
                     myRecipe.setId(idRecipe);
                     recipeRepository.actualizarFS(myRecipe, new CallBackRecipeApp<Boolean>() {
                         @Override
@@ -82,7 +86,7 @@ public class AddRecipeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     setResult(RESULT_OK);
-                    Recipe myRecipe = new Recipe(editTextName.getText().toString(), editTextImage.getText().toString(), editTextDescripcion.getText().toString());
+                    Recipe myRecipe = new Recipe(editTextName.getText().toString(),user, editTextImage.getText().toString(), editTextDescripcion.getText().toString());
                     recipeRepository.agregarFS(myRecipe, new CallBackRecipeApp<Boolean>() {
                         @Override
                         public void correct(Boolean respuest) {

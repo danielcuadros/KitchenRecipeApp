@@ -18,6 +18,11 @@
             android:layout_height="40dp"
             android:layout_marginStart="56dp"
             android:layout_marginTop="32dp"
+            android:layout_marginEnd="56dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,13 +33,14 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
+            android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_name"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <TextView
-            android:id="@+id/textView_user"
+            android:id="@+id/textView_8787"
             android:layout_width="150dp"
             android:layout_height="30dp"
             android:layout_marginStart="56dp"
@@ -49,7 +55,7 @@
             android:layout_marginStart="56dp"
             android:layout_marginTop="38dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_user" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_8787" />
 
         <ImageButton
             android:id="@+id/imageButton_like"
@@ -93,12 +99,34 @@
             android:layout_marginStart="56dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="56dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_eeeliminar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_comentar" />
+
+        <Button
+            android:id="@+id/button_eeeditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/buttons_login_desing"
+            android:text="editar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button_eeeliminar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/buttons_login_desing"
+            android:text="Eliminar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

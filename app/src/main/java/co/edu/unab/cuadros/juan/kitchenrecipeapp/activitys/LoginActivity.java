@@ -47,11 +47,11 @@ public class LoginActivity extends AppCompatActivity {
                 userRepository.validate(email, password, new CallBackRecipeApp<User>() {
                     @Override
                     public void correct(User respuest) {
-                        String idUser = respuest.getId();
+                        String user = respuest.getName();
                         if(respuest!=null){
                             Intent i = new Intent(LoginActivity.this,MainActivity.class);
                             i.putExtra("bandera", 1);
-                            i.putExtra("idUser",idUser);
+                            i.putExtra("user",user);
                             startActivity(i);
                             finish();
                         }else{

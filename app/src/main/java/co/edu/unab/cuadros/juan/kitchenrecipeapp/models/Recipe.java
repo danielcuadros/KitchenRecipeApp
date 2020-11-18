@@ -18,12 +18,6 @@ public class Recipe {
         this.description = description;
     }
 
-    public Recipe(String name, String urlImage, String description) {
-        this.id = "";
-        this.name = name;
-        this.urlImage = urlImage;
-        this.description = description;
-    }
 
     public String getId() {
         return id;
